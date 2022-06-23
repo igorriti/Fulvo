@@ -14,7 +14,7 @@ power           : atom (POW factor)*
 
 call            : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
 
-atom            : INT|FLOAT|IDENTIFIER
+atom            : INT|FLOAT|STRING|IDENTIFIER
                 : LPAREN expr RPAREN
                 : if-expr
                 : for-expr
@@ -30,6 +30,6 @@ for-expr        : KEYWORD:FOR IDENTIFIER EQ expr KEYWORD:TO expr
 
 while-expr      :KEYWORD:WHILE expr KEYWORD:THEN expr
 
-func-def : KEYWORD: FUN IDENTIFIER?
-            LPAREN(IDENTIFIER (COMMA IDENTIFIER*)? RPAREN
-            ARROW expr 
+func-def        : KEYWORD: FUN IDENTIFIER?
+                  LPAREN(IDENTIFIER (COMMA IDENTIFIER*)? RPAREN
+                  ARROW expr 
