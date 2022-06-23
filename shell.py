@@ -1,4 +1,4 @@
-import basic
+import fulvo.basic as basic
 
 while True:
 	text = input('basic > ')
