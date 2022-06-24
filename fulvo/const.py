@@ -43,22 +43,51 @@ TT_EOF	    = 'EOF'
 #######################################
 
 KEYWORDS = [
-    'VAR',
-	'AND',
-	'OR',
-	'NOT',
-	'IF',
-	'THEN',
-	'ELSE',
-	'ELIF',
-	'FOR',
-	'TO',
-	'STEP',
-	'WHILE',
-	'FUN',
-	'THEN',
-	'END',
-	'RETURN',
-	'CONTINUE',
-	'BREAK',
+    'Jugador',
+	'y',
+	'o',
+	'no',
+	'si',
+	'patea',
+	'palo',
+	'rebote',
+	'ArrancaPorLaDerecha',
+	'hasta',
+	'pasala',
+	'mientras',
+	'jugada',
+	'gol',
+	'devuelve',
+	'gambetea',
+	'falta',
 ]
+
+#######################################
+# ERRORS MESSAGES
+#######################################
+
+error_messages = {
+	"IllegarlCharError" : "Pipa pipa pipa, no no no. Se te fue por afuera, pusiste ",
+	"ExpectedCharError" : "Chequeado con el VAR, te falto ",
+	"InvalidSyntaxError" : "No entendi nada. Murió el fútbol. Falleció la pelota. Pareció el balónpie. Agoniza la caprichosa. Se mancho la de cuero. La esferica de luto.",
+	"RuntimeError" : "Amarilla, la proxima es roja."
+}
+
+#######################################
+# ERRORS DETAILS
+#######################################
+
+detail_messages = {
+	"expected_int_or_float" : "\nNecesito el NUMERO de camiseta",
+	"expected_expr" : "\nHiciste un pase a la nada",
+	"expected_op" 	: "\nTirate una gambeta porque sino no pasas a ningun defensa",
+	"expected_rparen" : "\nFuera de juego, no pusiste parentesis",
+	"expected_identifier" : "\nChe y como se llama el jugador? Digo porque sino no lo puedo anotar en la plantilla viste",
+	"expected_equal" : "\nTenes que poner una igualdad, ejemplo Messi = GOAT",
+	"expected_not_equal" : "\n",
+	"zero_div" : "\nEs mas probable que San Marino gane un partido de fútbol a que puedas dividir por 0",
+	"unknown_variable" : "\n No se que jugador es ese, no lo tengo en la planilla ",
+	"syntax_error" : "Viven en un country, andan en BMW para arriba, morfan bien todos los dias. Tan dificil era leer la documentacion?",
+	"expected_end" : "Y el gol??? Hacelo, por dios hacelo Cuevas, HACELO CUEVAAAASSS"
+
+}

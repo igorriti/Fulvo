@@ -48,7 +48,7 @@ class Interpreter:
 		if not value:
 			return res.failure(RTError(
 				node.pos_start, node.pos_end,
-				f"'{var_name}' is not defined",
+				detail_messages["unkown_variable"]+"'"+var_name+"'",
 				context
 			))
 
@@ -93,9 +93,9 @@ class Interpreter:
 			result, error = left.get_comparison_lte(right)
 		elif node.op_tok.type == TT_GTE:
 			result, error = left.get_comparison_gte(right)
-		elif node.op_tok.matches(TT_KEYWORD, 'AND'):
+		elif node.op_tok.matches(TT_KEYWORD, 'y'):
 			result, error = left.anded_by(right)
-		elif node.op_tok.matches(TT_KEYWORD, 'OR'):
+		elif node.op_tok.matches(TT_KEYWORD, 'o'):
 			result, error = left.ored_by(right)
 
 		if error:
@@ -112,7 +112,7 @@ class Interpreter:
 
 		if node.op_tok.type == TT_MINUS:
 			number, error = number.multed_by(Number(-1))
-		elif node.op_tok.matches(TT_KEYWORD, 'NOT'):
+		elif node.op_tok.matches(TT_KEYWORD, 'no'):
 			number, error = number.notted()
 
 		if error:

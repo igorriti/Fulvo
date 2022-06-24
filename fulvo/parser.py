@@ -32,7 +32,7 @@ class Parser:
 		if not res.error and self.current_tok.type != TT_EOF:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected '+', '-', '*', '/', '^', '==', '!=', '<', '>', <=', '>=', 'AND' or 'OR'"
+				detail_messages["expected_expr"]
 			))
 		return res
 
@@ -79,7 +79,7 @@ class Parser:
 		pos_start = self.current_tok.pos_start.copy()
 
 
-		if self.current_tok.matches(TT_KEYWORD, 'RETURN'):
+		if self.current_tok.matches(TT_KEYWORD, 'devuelve'):
 			res.register_advancement()
 			self.advance()
 
@@ -88,12 +88,12 @@ class Parser:
 				self.reverse(res.to_reverse_count)
 			return res.success(ReturnNode(expr,pos_start,self.current_tok.pos_start.copy()))
 		
-		if self.current_tok.matches(TT_KEYWORD, 'CONTINUE'):	
+		if self.current_tok.matches(TT_KEYWORD, 'gambetea'):	
 			res.register_advancement()
 			self.advance()
 			return res.success(ContinueNode(pos_start,self.current_tok.pos_start.copy()))
 			
-		if self.current_tok.matches(TT_KEYWORD, 'BREAK'):
+		if self.current_tok.matches(TT_KEYWORD, 'falta'):
 			res.register_advancement()
 			self.advance()
 			return res.success(BreakNode(pos_start,self.current_tok.pos_start.copy()))
@@ -101,20 +101,20 @@ class Parser:
 		expr = res.register(self.expr())
 		if res.error: return res.failure (InvalidSyntaxError(
 			self.current_tok.pos_start, self.current_tok.pos_end,
-			"Expected 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[', 'NOT', 'RETURN', 'CONTINUE', 'BREAK' or a value"))
+			detail_messages["expected_expr"]))
 		
 		return res.success(expr)
 	def expr(self):
 		res = ParseResult()
 
-		if self.current_tok.matches(TT_KEYWORD, 'VAR'):
+		if self.current_tok.matches(TT_KEYWORD, 'Jugador'):
 			res.register_advancement()
 			self.advance()
 
 			if self.current_tok.type != TT_IDENTIFIER:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					"Expected identifier"
+					detail_messages["expected_identifier"]
 				))
 
 			var_name = self.current_tok
@@ -124,7 +124,7 @@ class Parser:
 			if self.current_tok.type != TT_EQ:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					"Expected '='"
+					detail_messages["expected_equal"]
 				))
 
 			res.register_advancement()
@@ -133,12 +133,12 @@ class Parser:
 			if res.error: return res
 			return res.success(VarAssignNode(var_name, expr))
 
-		node = res.register(self.bin_op(self.comp_expr, ((TT_KEYWORD, 'AND'), (TT_KEYWORD, 'OR'))))
+		node = res.register(self.bin_op(self.comp_expr, ((TT_KEYWORD, 'y'), (TT_KEYWORD, 'o'))))
 
 		if res.error:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+				detail_messages["expected_expr"]
 			))
 
 		return res.success(node)
@@ -146,7 +146,7 @@ class Parser:
 	def comp_expr(self):
 		res = ParseResult()
 
-		if self.current_tok.matches(TT_KEYWORD, 'NOT'):
+		if self.current_tok.matches(TT_KEYWORD, 'no'):
 			op_tok = self.current_tok
 			res.register_advancement()
 			self.advance()
@@ -160,7 +160,7 @@ class Parser:
 		if res.error:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+				detail_messages["expected_expr"]
 			))
 
 		return res.success(node)
@@ -205,7 +205,7 @@ class Parser:
 				if res.error:
 					return res.failure(InvalidSyntaxError(
 						self.current_tok.pos_start, self.current_tok.pos_end,
-						"Expected ')', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+						detail_messages["expected_expr"]
 					))
 
 				while self.current_tok.type == TT_COMMA:
@@ -218,7 +218,7 @@ class Parser:
 				if self.current_tok.type != TT_RPAREN:
 					return res.failure(InvalidSyntaxError(
 						self.current_tok.pos_start, self.current_tok.pos_end,
-						f"Expected ',' or ')'"
+						detail_messages["syntax_error"] + "/n te comiste la pelota y te falto una , o )"
 					))
 
 				res.register_advancement()
@@ -257,7 +257,7 @@ class Parser:
 			else:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					"Expected ')'"
+					detail_messages["expected_rparen"]
 				))
 
 		elif tok.type == TT_LSQUARE:
@@ -265,29 +265,29 @@ class Parser:
 			if res.error: return res
 			return res.success(list_expr)
 
-		elif tok.matches(TT_KEYWORD, 'IF'):
+		elif tok.matches(TT_KEYWORD, 'si'):
 			if_expr = res.register(self.if_expr())
 			if res.error: return res
 			return res.success(if_expr)
 
-		elif tok.matches(TT_KEYWORD, 'FOR'):
+		elif tok.matches(TT_KEYWORD, 'ArrancaPorLaDerecha'):
 			for_expr = res.register(self.for_expr())
 			if res.error: return res
 			return res.success(for_expr)
 
-		elif tok.matches(TT_KEYWORD, 'WHILE'):
+		elif tok.matches(TT_KEYWORD, 'mientras'):
 			while_expr = res.register(self.while_expr())
 			if res.error: return res
 			return res.success(while_expr)
 
-		elif tok.matches(TT_KEYWORD, 'FUN'):
+		elif tok.matches(TT_KEYWORD, 'jugada'):
 			func_def = res.register(self.func_def())
 			if res.error: return res
 			return res.success(func_def)
 
 		return res.failure(InvalidSyntaxError(
 			tok.pos_start, tok.pos_end,
-			"Expected int, float, identifier, '+', '-', '(', '[' ,IF', 'FOR', 'WHILE', 'FUN'"
+			detail_messages["expected_int_or_float"]
 		))
 
 	def list_expr(self):
@@ -298,7 +298,7 @@ class Parser:
 		if self.current_tok.type != TT_LSQUARE:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected '['"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto un ["
 			))
 
 		res.register_advancement()
@@ -312,7 +312,7 @@ class Parser:
 			if res.error:
 				return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				"Expected ']', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+				detail_messages["expected_expr"]
 				))
 
 			while self.current_tok.type == TT_COMMA:
@@ -325,7 +325,8 @@ class Parser:
 			if self.current_tok.type != TT_RSQUARE:
 				return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected ',' or ']'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto , o un )"
+
 				))
 
 			res.register_advancement()
@@ -339,19 +340,19 @@ class Parser:
 
 	def if_expr(self):		 
 		res = ParseResult()
-		all_cases = res.register(self.if_expr_cases('IF'))
+		all_cases = res.register(self.if_expr_cases('si'))
 		if res.error: return res
 		cases, else_case = all_cases
 		return res.success(IfNode(cases, else_case))
 
 	def if_expr_b(self):
-		return self.if_expr_cases('ELIF')
+		return self.if_expr_cases('rebote')
 	
 	def if_expr_c(self):
 		res = ParseResult()
 		else_case = None
 
-		if self.current_tok.matches(TT_KEYWORD, 'ELSE'):
+		if self.current_tok.matches(TT_KEYWORD, 'palo'):
 			res.register_advancement()
 			self.advance()
 
@@ -363,13 +364,13 @@ class Parser:
 				if res.error: return res
 				else_case = (statements, True)
 
-				if self.current_tok.matches(TT_KEYWORD, 'END'):
+				if self.current_tok.matches(TT_KEYWORD, 'gol'):
 					res.register_advancement()
 					self.advance()
 				else:
 					return res.failure(InvalidSyntaxError(
 						self.current_tok.pos_start, self.current_tok.pos_end,
-						"Expected 'END'"
+						detail_messages["expected_end"]
 					))
 			else:
 				expr = res.register(self.statement())
@@ -382,7 +383,7 @@ class Parser:
 		res = ParseResult()
 		cases, else_case = [], None
 
-		if self.current_tok.matches(TT_KEYWORD, 'ELIF'):
+		if self.current_tok.matches(TT_KEYWORD, 'rebote'):
 			all_cases = res.register(self.if_expr_b())
 			if res.error: return res
 			cases, else_case = all_cases
@@ -400,7 +401,7 @@ class Parser:
 		if not self.current_tok.matches(TT_KEYWORD, case_keyword):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected '{case_keyword}'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto '" +case_keyword + "'"
 			))
 
 		res.register_advancement()
@@ -409,10 +410,10 @@ class Parser:
 		condition = res.register(self.expr())
 		if res.error: return res
 
-		if not self.current_tok.matches(TT_KEYWORD, 'THEN'):
+		if not self.current_tok.matches(TT_KEYWORD, 'patea'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'THEN'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'patea'"
 			))
 
 		res.register_advancement()
@@ -426,7 +427,7 @@ class Parser:
 			if res.error: return res
 			cases.append((condition, statements, True))
 			
-			if self.current_tok.matches(TT_KEYWORD, 'END'):
+			if self.current_tok.matches(TT_KEYWORD, 'gol'):
 				res.register_advancement()
 				self.advance()
 			else:
@@ -449,10 +450,10 @@ class Parser:
 	def for_expr(self):
 		res = ParseResult()
 
-		if not self.current_tok.matches(TT_KEYWORD, 'FOR'):
+		if not self.current_tok.matches(TT_KEYWORD, 'ArrancaPorLaDerecha'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'FOR'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'ArrancaPorLaDerecha'"
 			))
 
 		res.register_advancement()
@@ -461,7 +462,7 @@ class Parser:
 		if self.current_tok.type != TT_IDENTIFIER:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected identifier"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto un identificador"
 			))
 
 		var_name = self.current_tok
@@ -471,7 +472,7 @@ class Parser:
 		if self.current_tok.type != TT_EQ:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected '='"
+				detail_messages["expected_equal"]
 			))
 		
 		res.register_advancement()
@@ -483,7 +484,7 @@ class Parser:
 		if not self.current_tok.matches(TT_KEYWORD, 'TO'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'TO'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'TO'"
 			))
 		
 		res.register_advancement()
@@ -492,7 +493,7 @@ class Parser:
 		end_value = res.register(self.expr())
 		if res.error: return res
 
-		if self.current_tok.matches(TT_KEYWORD, 'STEP'):
+		if self.current_tok.matches(TT_KEYWORD, 'pasala'):
 			res.register_advancement()
 			self.advance()
 
@@ -501,10 +502,10 @@ class Parser:
 		else:
 			step_value = None
 
-		if not self.current_tok.matches(TT_KEYWORD, 'THEN'):
+		if not self.current_tok.matches(TT_KEYWORD, 'patea'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'THEN'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'patea'"
 			))
 
 		res.register_advancement()
@@ -517,10 +518,10 @@ class Parser:
 			body = res.register(self.statements())
 			if res.error: return res
 
-			if not self.current_tok.matches(TT_KEYWORD, 'END'):
+			if not self.current_tok.matches(TT_KEYWORD, 'gol'):
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					f"Expected 'END'"
+					detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'gol'"
 				))
 
 			res.register_advancement()
@@ -536,10 +537,10 @@ class Parser:
 	def while_expr(self):
 		res = ParseResult()
 
-		if not self.current_tok.matches(TT_KEYWORD, 'WHILE'):
+		if not self.current_tok.matches(TT_KEYWORD, 'mientras'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'WHILE'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'mientras'"
 			))
 
 		res.register_advancement()
@@ -548,10 +549,10 @@ class Parser:
 		condition = res.register(self.expr())
 		if res.error: return res
 
-		if not self.current_tok.matches(TT_KEYWORD, 'THEN'):
+		if not self.current_tok.matches(TT_KEYWORD, 'patea'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'THEN'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'patea'"
 			))
 
 		res.register_advancement()
@@ -564,10 +565,10 @@ class Parser:
 			body = res.register(self.statements())
 			if res.error: return res
 
-			if not self.current_tok.matches(TT_KEYWORD, 'END'):
+			if not self.current_tok.matches(TT_KEYWORD, 'gol'):
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					f"Expected 'END'"
+					detail_messages["expected_end"]
 				))
 
 			res.register_advancement()
@@ -583,10 +584,10 @@ class Parser:
 	def func_def(self):
 		res = ParseResult()
 
-		if not self.current_tok.matches(TT_KEYWORD, 'FUN'):
+		if not self.current_tok.matches(TT_KEYWORD, 'jugada'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'FUN'"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto 'jugada'"
 			))
 
 		res.register_advancement()
@@ -599,14 +600,14 @@ class Parser:
 			if self.current_tok.type != TT_LPAREN:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					f"Expected '('"
+					detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto '('"
 				))
 		else:
 			var_name_tok = None
 			if self.current_tok.type != TT_LPAREN:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					f"Expected identifier or '('"
+					detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto '(' o la jugada"
 				))
 		
 		res.register_advancement()
@@ -625,7 +626,7 @@ class Parser:
 				if self.current_tok.type != TT_IDENTIFIER:
 					return res.failure(InvalidSyntaxError(
 						self.current_tok.pos_start, self.current_tok.pos_end,
-						f"Expected identifier"
+						detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto un identificador"
 					))
 
 				arg_name_toks.append(self.current_tok)
@@ -635,13 +636,13 @@ class Parser:
 			if self.current_tok.type != TT_RPAREN:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					f"Expected ',' or ')'"
+					detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto ','"
 				))
 		else:
 			if self.current_tok.type != TT_RPAREN:
 				return res.failure(InvalidSyntaxError(
 					self.current_tok.pos_start, self.current_tok.pos_end,
-					f"Expected identifier or ')'"
+					detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto ','"
 				))
 
 		res.register_advancement()
@@ -663,7 +664,7 @@ class Parser:
 		if self.current_tok.type != TT_NEWLINE:
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected '->' or NEWLINE"
+				detail_messages["syntax_error"] + "/n Te comiste la pelota y te falto '->' o saltar de linea"
 			))
 		
 		res.register_advancement()
@@ -672,10 +673,10 @@ class Parser:
 		node_to_return = res.register(self.statements())
 		if res.error: return res
 
-		if not self.current_tok.matches(TT_KEYWORD, 'END'):
+		if not self.current_tok.matches(TT_KEYWORD, 'gol'):
 			return res.failure(InvalidSyntaxError(
 				self.current_tok.pos_start, self.current_tok.pos_end,
-				f"Expected 'END'"
+				detail_messages["expected_end"]
 			))
 		
 		res.register_advancement()
