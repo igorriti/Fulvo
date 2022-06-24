@@ -1,6 +1,6 @@
 # Fulvo
 
-Fulvo es un lenguaje de programacion orientado a la redonda. Como el lenguaje esta basado en futbol, funciona con terimnos plenamente futbolisticos.
+Fulvo es un lenguaje de programacion orientado a la redonda. Como el lenguaje esta basado en futbol, funciona con terminos plenamente futbolisticos.
 
 ## Como utilizarlo
 
