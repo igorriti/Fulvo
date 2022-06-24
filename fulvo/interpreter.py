@@ -1,4 +1,4 @@
-from fulvo.value import *
+from fulvo.value import Value,Number,String,List,Function
 from fulvo.const import *
 from fulvo.RTResult import *
 from fulvo.error import *
@@ -48,7 +48,7 @@ class Interpreter:
 		if not value:
 			return res.failure(RTError(
 				node.pos_start, node.pos_end,
-				detail_messages["unkown_variable"]+"'"+var_name+"'",
+				detail_messages["unknown_variable"]+"'"+var_name+"'",
 				context
 			))
 
@@ -70,7 +70,7 @@ class Interpreter:
 		if res.should_return(): return res
 		right = res.register(self.visit(node.right_node, context))
 		if res.should_return(): return res
-
+		
 		if node.op_tok.type == TT_PLUS:
 			result, error = left.added_to(right)
 		elif node.op_tok.type == TT_MINUS:

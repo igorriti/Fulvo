@@ -31,7 +31,7 @@ class InvalidSyntaxError(Error):
 
 class RTError(Error):
     def __init__(self, pos_start, pos_end, details, context):
-        super().__init__(pos_start, pos_end, error_messages, details)
+        super().__init__(pos_start, pos_end, error_messages["RuntimeError"], details)
         self.context = context
     def as_string(self):
         result = self.generate_traceback()

@@ -1,4 +1,4 @@
-from fulvo.value import Number, String, BuiltInFunction
+from fulvo.value import Number, String,List, BuiltInFunction
 from fulvo.symbol_table import SymbolTable
 
 ######################################
@@ -9,10 +9,15 @@ global_symbol_table.set("NULL", Number.null)
 global_symbol_table.set("FALSE", Number.false)
 global_symbol_table.set("TRUE", Number.true)
 global_symbol_table.set("MATH_PI", Number.math_PI)
+global_symbol_table.set("ROJA", Number.null)
 global_symbol_table.set("D10S", String("Maradona"))
 global_symbol_table.set("GOAT", String("Messi"))
 global_symbol_table.set("MADRID", Number(912))
 global_symbol_table.set("QATAR", Number(2022)) 
+global_symbol_table.set("LA_PLATA", String("7-0"))
+global_symbol_table.set("Gano_San_Marino", Number.false)
+global_symbol_table.set("Dias_Sin_Quilombo_En_Boca", Number(0))
+global_symbol_table.set("SELECCION_ARGENTINA", List([String("Martinez"), String("Molinas"), String("Romero"), String("Otamendi"), String("Acuña"), String("Paredes"), String("De Paul"), String("Lo Celso"), String("Messi"), String("Di Maria"), String("Martinez")]))
 global_symbol_table.set("Relatar", BuiltInFunction("print"))
 global_symbol_table.set("Relatar_ret", BuiltInFunction("print_ret"))
 global_symbol_table.set("Poner", BuiltInFunction("input"))
@@ -28,13 +33,13 @@ global_symbol_table.set("Sacar", BuiltInFunction("pop"))
 global_symbol_table.set("Extender", BuiltInFunction("extend"))
 global_symbol_table.set("Longitud", BuiltInFunction("len"))
 global_symbol_table.set("Arrancar_Partido", BuiltInFunction("run"))
-######################################
-#Estas me quedan por implementar
-# global_symbol_table.set("Historico", BuiltInFunction("historico")) # gol a los ingleses
-# global_symbol_table.set("Hacer_Falta", BuiltInFunction("falta"))
-# global_symbol_table.set("Cabezaso", BuiltInFunction("cabezaso"))
-# global_symbol_table.set("Ankara", BuiltInFunction("ankara"))
-# global_symbol_table.set("Bicho", BuiltInFunction("bicho"))
-# global_symbol_table.set("Boca", BuiltInFunction("boca"))
-# global_symbol_table.set("River", BuiltInFunction("river"))
+global_symbol_table.set("Historico", BuiltInFunction("historico"))
+global_symbol_table.set("Hacer_Tiempo", BuiltInFunction("tiempo"))
+global_symbol_table.set("Lesionar", BuiltInFunction("lesionar"))
+global_symbol_table.set("Cabezaso", BuiltInFunction("cabezaso"))
+global_symbol_table.set("Ankara", BuiltInFunction("ankara"))
+global_symbol_table.set("Bicho", BuiltInFunction("bicho"))
+global_symbol_table.set("Boca", BuiltInFunction("boca"))
+global_symbol_table.set("Esto_Es_Boca", BuiltInFunction("esBoca"))
+global_symbol_table.set("River", BuiltInFunction("river"))
 

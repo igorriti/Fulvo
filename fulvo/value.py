@@ -2,11 +2,13 @@ from fulvo.error import RTError
 from fulvo.RTResult import RTResult
 from fulvo.context import Context
 from fulvo.symbol_table import SymbolTable
-from fulvo.interpreter import *
 from fulvo.basic import *
+from fulvo.dios.vid_to_ascii import *
+
 import math
 import os
-
+from time import sleep
+import sys
 
 
 #######################################
@@ -93,7 +95,7 @@ class Number(Value):
 	def __init__(self, value):
 		super().__init__()
 		self.value = value
-
+	
 	def added_to(self, other):
 		if isinstance(other, Number):
 			return Number(self.value + other.value).set_context(self.context), None
@@ -304,14 +306,14 @@ class BaseFunction(Value):
 		if len(args) > len(arg_names):
 				return res.failure(RTError(
 					self.pos_start, self.pos_end,
-					f"{len(args) - len(arg_names)} too many args passed into '{self.name}'",
+					f"{len(args) - len(arg_names)} Te pasaste de rosca con los Jugadores '{self.name}'",
 					self.context
 				))
 			
 		if len(args) < len(arg_names):
 			return res.failure(RTError(
 				self.pos_start, self.pos_end,
-				f"{len(arg_names) - len(args)} too few args passed into '{self.name}'",
+				f"{len(arg_names) - len(args)} No le pasaste todos los Jugadores '{self.name}'",
 				self.context
 			))	
 		
@@ -339,6 +341,8 @@ class Function(BaseFunction):
 		self.should_auto_return = should_auto_return
 
 	def execute(self, args):
+		from fulvo.interpreter import Interpreter
+
 		res = RTResult()
 		interpreter = Interpreter()
 		exec_ctx = self.generate_new_context()
@@ -557,3 +561,125 @@ class BuiltInFunction(BaseFunction):
 		
 		return RTResult().success(Number.null)
 	execute_run.arg_names = ['fn']
+
+	def execute_historico(self, exec_ctx):
+		dios()
+		return RTResult().success(Number.null)
+	execute_historico.arg_names = []
+
+	def execute_tiempo(self, exec_ctx):
+		sleep_time = exec_ctx.symbol_table.get("value")
+		if isinstance(sleep_time, Number):
+			sleep(sleep_time.value)
+			return RTResult().success(Number.null)
+		else :
+			return RTResult().failure(RTError(
+				self.pos_start, self.pos_end,
+				"No podemos hacer tiempo si no pones por cuantos segundo queres hacerlo",
+				exec_ctx
+			))
+		return RTResult().success(Number.null)
+	execute_tiempo.arg_names = ['value']
+
+	def execute_lesionar(self, exec_ctx):
+		var = exec_ctx.symbol_table.get('var')
+		if isinstance(var, Number):
+			print(f"{var} se ha lesionado, fractura de perone")
+			del var #Intento eliminar la variable jaja no se como hacerlo todavia
+		else:
+			return RTResult().failure(RTError(
+				self.pos_start, self.pos_end,
+				"UFF se salvo, no lo lesionaste de pedo",
+				exec_ctx
+			))
+
+		return RTResult().success(Number.null)
+	execute_lesionar.arg_names = ['var']
+
+	def execute_cabezaso(self, exec_ctx):
+		print("\nComo le vas a dar un cabezaso a Materazzi?")
+		sleep(1)
+		print("\nTe vas a tener que ir pelado")
+		sleep(2)
+		print("\n \033[91m *Saca roja* \033[0m")
+		sleep(2)
+		sys.exit(0)
+		return RTResult().success(Number.null) # never reached
+	execute_cabezaso.arg_names = []
+
+	def execute_ankara(self, exec_ctx):
+		print ("Inmeso Messi")
+		sleep(1)
+		print ("Ankara Messi, Ankara Messi, Ankara")
+		sleep(1)
+		print ("Gollll")
+		return RTResult().success(Number.null)
+	execute_ankara.arg_names = []
+
+	def execute_bicho(self,exec_ctx):
+		print("SIUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
+		return RTResult().success(Number.null)
+	execute_bicho.arg_names = []
+
+	def execute_boca(self, exec_ctx):
+		var = exec_ctx.symbol_table.get('var')
+		
+		print("El santo consejo del futbol esta analizando su peticion...")
+		sleep(3)
+		if isinstance(var, Number):
+			var.value = "12" #Intento cambiar el valor de la variable jaja no se como hacerlo todavia
+		elif isinstance(var, String):
+			var.value = "BOCAAA"
+		else:
+			return RTResult().failure(RTError(
+				self.pos_start, self.pos_end,
+				"Tu jugador no es apto para ser de Boca.", 
+				exec_ctx
+			))
+		return RTResult().success(var)
+	execute_boca.arg_names = ['var']
+
+	def execute_esBoca(self,exec_ctx):
+		var = exec_ctx.symbol_table.get('var')
+		print("Disculpe, esto es Boca?")
+		if isinstance(var, String):
+			if var.value in ("BOCA", "Maradona", "Riquelme", "Palermo", "Tevez"):
+				print("Si, esto es BOCAAAAAAAAAAAA")
+				return RTResult().success(Number.true)
+			else:
+				if var.value not in ("River", "Quintero", "Martinez", "Burrito", "Alvarez", "Gas pimienta"):
+					print("No jefe, esto no es Boca")
+				else:
+					print("Tenes menos de 10 segundos para irte y que no te agarremos con la 12")
+				return RTResult().success(Number.false)
+		else:
+			return RTResult().failure(RTError(
+				self.pos_start, self.pos_end,
+				"No podes preguntarme si este mamarracho es Boca.", 
+				exec_ctx
+			))
+	execute_esBoca.arg_names = ['var']
+
+	def execute_river(self, exec_ctx):
+		### No se me ocurre nada
+		print ("Hacela personal y ahi se va")
+		sleep(1)
+		print ("Se va se va")
+		sleep(1)
+		print ("Se viene Martinez para el gol")
+		sleep(1)
+		print ("Y va el tercero")
+		sleep(0.4)
+		print ("Y va el tercero")
+		sleep(0.4)
+		print ("Y va el tercero")
+		sleep(0.4)
+		print ("Y gol de \033[31mRiver \033[0m")
+		sleep(0.4)
+		print ("Y gol de \033[31mRiverrrrrrrrrrrrrrrrr \033[0m")
+		sleep(1)
+		print ("GOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+		sleep(4)
+		print ("Moriste en \033[31m madrid \033[0m bostero")
+		return RTResult().success(Number.null)
+	execute_river.arg_names = []
