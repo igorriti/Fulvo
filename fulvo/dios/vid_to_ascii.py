@@ -2,11 +2,13 @@ from PIL import ImageDraw,ImageFont,Image
 import cv2
 import numpy as np
 import math
+import pathlib
 from playsound import playsound
 
 
 
-fileName="D:\\Proyectos_Programacion\\Python\\Fulvo\\fulvo\\dios\\marado.mp4"
+path = pathlib.Path(__file__).parent.resolve().__str__()
+fileName=path+"\\marado.mp4"
 chars = " .'`^\",:;Il!i><~+_-?][}{1)(|\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 charlist=list(chars)
 charlen=len(charlist)
@@ -24,7 +26,7 @@ cap=cv2.VideoCapture(fileName)
 Font=ImageFont.truetype('C:\\Windows\\Fonts\\lucon.ttf',15)
 def dios():
 
-    playsound('D:\\Proyectos_Programacion\\Python\\Fulvo\\fulvo\\DIOS\\marado_sound.mp3', False)
+    playsound(path+"\\marado_sound.mp3", False)
 
     while True:
         _,img=cap.read()
