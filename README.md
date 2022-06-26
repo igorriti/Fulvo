@@ -126,8 +126,7 @@ falta ---> Break
    Bicho() ---> Probalo
    Esto_Es_Boca(a) ---> Probalo, ojo con lo que pones.
    River() ---> Probalo.
-   Lesionar(a) ---> Intenta lesionar un jugador /Esta en desarrollo
-   Boca() ---> //Esta en desarrollo
+
 
 //CONSTANTES
   NULL ---> 0
