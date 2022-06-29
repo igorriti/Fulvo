@@ -1,6 +1,6 @@
-# fulvo
+# Fulvo
 
-Fulvo is a round-oriented programming language. As the language is based on football, it works with fully football terms.
+Fulvo is a football-oriented programming language. As the language is based on football, it works with fully football terms.
 
 ## How to use
 
