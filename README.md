@@ -2,6 +2,7 @@
 
 Fulvo es un lenguaje de programacion orientado a la redonda. Como el lenguaje esta basado en futbol, funciona con terminos plenamente futbolisticos.
 
+[Read in English](https://github.com/igorriti/Fulvo/blob/main/readmeEN.md)
 ## Como utilizarlo
 
 Para utilizar el lenguaje segui los siguientes pasos:
